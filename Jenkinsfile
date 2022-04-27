@@ -29,5 +29,26 @@ pipeline {
                 }
             }
         } 
+        stage ('checkout') {
+            steps {
+                git credentialsId: 'mooneshbmsit-git', url: 'https://github.com/mooneshbmsit/dummy_nginx_helm.git', branch: 'main'
+            }
+        }
+        stage ('Pull nxinx image') {
+            stpes {
+                script {
+                    docker.withRegistry( '', registryCredential ) {
+                        dockerImage.pull
+                    }
+                }
+            }
+        }
+        stage ('Deploy chart') {
+            stpes {
+                script {
+                    sh "helm upgrade nginx-server"
+                }
+            }
+        }
     }
 }
